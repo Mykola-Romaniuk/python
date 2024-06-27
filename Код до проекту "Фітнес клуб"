@@ -1,0 +1,67 @@
+from payments import Payment
+
+class Person:
+    def __init__(self, name, age, id_number):
+        self.name = name
+        self.age = age
+        self.id_number = id_number
+
+    def get_info(self):
+        return f"{self.name}, {self.age} років, ID: {self.id_number}"
+
+
+class Client(Person):
+    def __init__(self, name, age, id_number, membership_type):
+        super().__init__(name, age, id_number)
+        self.membership_type = membership_type
+
+    def get_info(self):
+        return f"Клієнт: {super().get_info()}, Абонемент: {self.membership_type}"
+
+
+class Group:
+    def __init__(self, group_name, trainer, members=None):
+        self.group_name = group_name
+        self.trainer = trainer
+        self.members = members if members is not None else []
+
+    def add_member(self, client):
+        self.members.append(client)
+
+    def get_group_info(self):
+        members_info = "\n".join([member.get_info() for member in self.members])
+        return f"Група: {self.group_name}\nТренер: {self.trainer}\nЧлени групи:\n{members_info}"
+
+
+# Приклад використання
+
+if __name__ == "__main__":
+    # Створення клієнтів
+    client1 = Client("Олена", 25, "C001", "Місячний")
+    client2 = Client("Іван", 30, "C002", "Річний")
+
+    # Створення групи
+    group1 = Group("Ранкова група", "Тренер Андрій")
+    group1.add_member(client1)
+    group1.add_member(client2)
+
+    # Виведення інформації про групу
+    print(group1.get_group_info())
+
+    # Облік оплат
+    payment1 = Payment(client1, 500, "2024-06-01")
+    payment2 = Payment(client2, 1000, "2024-06-01")
+
+    print(payment1.get_payment_info())
+    print(payment2.get_payment_info())
+
+# Модуль обліку оплути
+class Payment:
+    def __init__(self, client, amount, date):
+        self.client = client
+        self.amount = amount
+        self.date = date
+
+    def get_payment_info(self):
+        return f"Оплата: {self.client.name}, Сума: {self.amount} грн, Дата: {self.date}"
+        
